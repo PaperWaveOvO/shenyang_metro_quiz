@@ -9,6 +9,17 @@
     <link rel="stylesheet" href="/shenyang_metro_quiz/style.css">
 </head>
 
+<div class="modal-overlay" id="exit-modal">
+    <div class="modal">
+        <h2>确认退出答题？</h2>
+        <p>退出后所有作答将作废。</p>
+        <div class="modal-actions">
+            <button id="btn-exit-yes" class="btn btn-danger">是</button>
+            <button id="btn-exit-no" class="btn btn-secondary">否</button>
+        </div>
+    </div>
+</div>
+
 <body>
     <div class="container" id="home">
         <h1 id="title">沈阳地铁</h1>
@@ -19,9 +30,9 @@
 
         <p class="p-programmer">By 纸浪i</p>
 
-        <button id="btn-start" class="btn-primary" type="button">开始答题</button>
+        <button id="btn-start" class="btn-primary">开始答题</button>
 
-        <button id="btn-about" class="btn-secondary" type="button">关于此程序</button>
+        <button id="btn-about" class="btn-secondary">关于此程序</button>
     </div>
 
     <div class="container hidden" id="quiz">
@@ -35,19 +46,19 @@
         </div>
 
         <div class="options">
-            <div class="option" type="button">选项 A</div>
-            <div class="option" type="button">选项 B</div>
-            <div class="option" type="button">选项 C</div>
-            <div class="option" type="button">选项 D</div>
+            <div class="option">选项 A</div>
+            <div class="option">选项 B</div>
+            <div class="option">选项 C</div>
+            <div class="option">选项 D</div>
         </div>
 
         <div class="stretch"></div>
 
-        <button class="btn btn-secondary btn-skip" type="button">跳过本题</button>
+        <button class="btn btn-secondary btn-skip">跳过本题</button>
 
         <div class="btn-group">
-            <button class="btn btn-secondary" type="button">提交所有答案</button>
-            <button class="btn btn-danger" type="button">退出答题</button>
+            <button class="btn btn-secondary">提交所有答案</button>
+            <button class="btn btn-danger">退出答题</button>
         </div>
     </div>
     <script src="/shenyang_metro_quiz/script.js"></script>
