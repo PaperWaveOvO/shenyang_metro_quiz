@@ -9,22 +9,28 @@
     <link rel="stylesheet" href="/shenyang_metro_quiz/style.css">
 </head>
 
-<div class="modal-overlay" id="exit-modal">
-    <div class="modal">
-        <h2>确认退出答题？</h2>
-        <p>退出后所有作答将作废。</p>
-        <div class="modal-actions">
-            <button id="btn-exit-yes" class="btn btn-danger">是</button>
-            <button id="btn-exit-no" class="btn btn-secondary">否</button>
+<body>
+    <div class="modal-overlay" id="exit-modal">
+        <div class="modal">
+            <h2>确认退出答题？</h2>
+            <p>退出后所有作答将作废。</p>
+            <div class="modal-actions">
+                <button id="btn-exit-yes" class="btn btn-danger">是</button>
+                <button id="btn-exit-no" class="btn btn-secondary">否</button>
+            </div>
         </div>
     </div>
-</div>
-
-<body>
     <div class="container" id="home">
         <h1 id="title">沈阳地铁</h1>
         <h2 id="subtitle">综合能力测试程序</h2>
+
+        <div class="stretch"></div>
+
         <p>共 20 题，每题 5 分，满分 100 分<br>每题作答时间 10 秒</p>
+
+        <div class="stretch"></div>
+
+        <p style="color: red;">考试过程中请勿查阅任何资料</p>
 
         <div class="stretch"></div>
 
@@ -37,8 +43,8 @@
 
     <div class="container hidden" id="quiz">
         <div class="info-bar">
-            <span id="progress">第 1 题 / 共 20 题</span>
-            <span id="timer">请在 10 秒内作答</span>
+            <span id="progress">第 1 题 / 共 <span id="total"></span> 题</span>
+            <span id="timer"></span>
         </div>
 
         <div class="question" id="question-text">
@@ -46,10 +52,10 @@
         </div>
 
         <div class="options">
-            <div class="option">选项 A</div>
-            <div class="option">选项 B</div>
-            <div class="option">选项 C</div>
-            <div class="option">选项 D</div>
+            <div class="option" id="option-a">选项 A</div>
+            <div class="option" id="option-b">选项 B</div>
+            <div class="option" id="option-c">选项 C</div>
+            <div class="option" id="option-d">选项 D</div>
         </div>
 
         <div class="stretch"></div>
@@ -57,7 +63,7 @@
         <button class="btn btn-secondary btn-skip">跳过本题</button>
 
         <div class="btn-group">
-            <button class="btn btn-secondary">提交所有答案</button>
+            <button class="btn btn-secondary">交卷</button>
             <button class="btn btn-danger">退出答题</button>
         </div>
     </div>
