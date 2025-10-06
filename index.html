@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沈阳地铁综合能力测试程序</title>
+
+    <link rel="stylesheet" href="/shenyang_metro_quiz/style.css">
+</head>
+
+<body>
+    <div class="container" id="home">
+        <h1 id="title">沈阳地铁</h1>
+        <h2 id="subtitle">综合能力测试程序</h2>
+        <p>共 20 题，每题 5 分，满分 100 分<br>每题作答时间 10 秒</p>
+
+        <div class="stretch"></div>
+
+        <p class="p-programmer">By 纸浪i</p>
+
+        <button id="btn-start" class="btn-primary" type="button">开始答题</button>
+
+        <button id="btn-about" class="btn-secondary" type="button">关于此程序</button>
+    </div>
+
+    <div class="container hidden" id="quiz">
+        <div class="info-bar">
+            <span id="progress">第 1 题 / 共 20 题</span>
+            <span id="timer">请在 10 秒内作答</span>
+        </div>
+
+        <div class="question" id="question-text">
+            题干
+        </div>
+
+        <div class="options">
+            <div class="option" type="button">选项 A</div>
+            <div class="option" type="button">选项 B</div>
+            <div class="option" type="button">选项 C</div>
+            <div class="option" type="button">选项 D</div>
+        </div>
+
+        <div class="stretch"></div>
+
+        <button class="btn btn-secondary btn-skip" type="button">跳过本题</button>
+
+        <div class="btn-group">
+            <button class="btn btn-secondary" type="button">提交所有答案</button>
+            <button class="btn btn-danger" type="button">退出答题</button>
+        </div>
+    </div>
+    <script src="/shenyang_metro_quiz/script.js"></script>
+</body>
+
+</html>
