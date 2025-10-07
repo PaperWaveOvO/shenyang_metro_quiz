@@ -67,7 +67,7 @@ body {
 .info-bar {
     display: flex;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: var(--standard-font-size);
 }
 
 /* 题干 */
@@ -173,6 +173,7 @@ body {
 
 .stretch {
     flex: 1;
+    min-height: 0;
 }
 
 .hidden {
@@ -223,4 +224,12 @@ body {
 
 #question-text {
     white-space: pre-wrap;
+}
+
+#quiz > * {
+  margin: 0;
+}
+
+.spacer {
+  height: var(--space, 10px);   /* 默认 10px */
 }
