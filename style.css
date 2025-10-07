@@ -35,7 +35,7 @@
         /* 内边距缩小一点 */
         padding: 20px;
         /* 保证高度更适合小屏 */
-        min-height: 70vh;
+        min-height: 80vh;
     }
 }
 
