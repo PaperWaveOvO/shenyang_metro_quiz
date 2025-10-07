@@ -18,7 +18,7 @@
     max-width: 720px;
 
     /* 统一最小高度 */
-    min-height: 60vh;
+    min-height: 65vh;
     /* 上限不超过视口 */
     max-height: 90vh;
     /* 超出的在容器内滚动 */
@@ -26,31 +26,28 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     text-align: center;
 }
 
 @media (max-width: 600px) {
     .container {
-        border-radius: 12px;
-        padding: 20px;
         /* 内边距缩小一点 */
-        min-height: 70%;
+        padding: 20px;
         /* 保证高度更适合小屏 */
+        min-height: 70vh;
     }
 }
 
 h1 {
-    margin-bottom: 0;
+    margin-bottom: 0px;
 }
 
 h2 {
-    margin-top: 0;
-    margin-bottom: 20px;
+    margin-top: 0px;
 }
 
 p {
-    margin-bottom: 20px;
     font-size: var(--standard-font-size);
 }
 
@@ -71,14 +68,12 @@ body {
     display: flex;
     justify-content: space-between;
     font-size: 16px;
-    margin-bottom: 20px;
 }
 
 /* 题干 */
 .question {
     font-size: 22px;
     font-weight: bold;
-    margin: 20px 0;
 }
 
 /* 选项 */
@@ -167,10 +162,6 @@ body {
 
 .btn-danger:active {
     background-color: #ed0000;
-}
-
-.btn-skip {
-    margin-top: var(--btn-gap);
 }
 
 .btn-group {
