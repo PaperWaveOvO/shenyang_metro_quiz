@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
             modal.style.display = "none";
         }
     });
-    fetch("shenyang_metro_quiz/data/question_bank.json")
+    fetch("/shenyang_metro_quiz/data/question_bank.json")
         .then(response => response.json())
         .then(data => {
             var totalCount = data.length;
@@ -99,4 +99,5 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error("读取题库失败：", err);
         });
 });
+
 
