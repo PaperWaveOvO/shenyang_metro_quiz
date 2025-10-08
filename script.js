@@ -169,7 +169,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // —— 退出答题弹窗 ——（跟你之前一样）
     btnExit.addEventListener("click", () => {
-        modal.style.display = "flex";
+        if (sessionActive === true && hasStarted === false) {
+            sessionActive = false;
+            clearAllTimers();
+            timerSpan.textContent = "";
+
+            quiz.classList.add("hidden");
+            home.classList.remove("hidden");
+            modal.style.display = "none";
+        } else {
+            modal.style.display = "flex";
+        }
     });
 
     btnNo.addEventListener("click", () => {
