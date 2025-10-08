@@ -158,6 +158,8 @@ document.addEventListener("DOMContentLoaded", function () {
             btnAction.classList.remove("btn-primary");
             btnAction.classList.add("btn-secondary");
 
+            btnAction.blur();
+
             btnSubmit.disabled = false
 
             document.getElementById("progress").style.display = "inline";   // 显示题号
