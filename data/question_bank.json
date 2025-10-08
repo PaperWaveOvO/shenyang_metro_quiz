@@ -1,6 +1,6 @@
 [
     {
-        "question": "沈阳地铁第 1 条开通运营的线路是（      ）。",
+        "question": "沈阳地铁第 1 条开通运营的线路是（      ）。",
         "option_a": "1 号线",
         "option_b": "2 号线",
         "option_c": "3 号线",
@@ -8,7 +8,7 @@
         "correct_answer": "a"
     },
     {
-        "question": "沈阳地铁第 2 条开通运营的线路是（      ）。",
+        "question": "沈阳地铁第 2 条开通运营的线路是（      ）。",
         "option_a": "1 号线",
         "option_b": "2 号线",
         "option_c": "3 号线",
@@ -16,7 +16,7 @@
         "correct_answer": "b"
     },
     {
-        "question": "沈阳地铁第 3 条开通运营的线路是（      ）。",
+        "question": "沈阳地铁第 3 条开通运营的线路是（      ）。",
         "option_a": "1 号线",
         "option_b": "2 号线",
         "option_c": "3 号线",
@@ -24,7 +24,7 @@
         "correct_answer": "d"
     },
     {
-        "question": "沈阳地铁第 4 条开通运营的线路是（      ）。",
+        "question": "沈阳地铁第 4 条开通运营的线路是（      ）。",
         "option_a": "3 号线",
         "option_b": "4 号线",
         "option_c": "9 号线",
@@ -32,7 +32,7 @@
         "correct_answer": "d"
     },
     {
-        "question": "沈阳地铁第 5 条开通运营的线路是（      ）。",
+        "question": "沈阳地铁第 5 条开通运营的线路是（      ）。",
         "option_a": "3 号线",
         "option_b": "4 号线",
         "option_c": "9 号线",
@@ -40,7 +40,7 @@
         "correct_answer": "b"
     },
     {
-        "question": "沈阳地铁第 6 条开通运营的线路是（      ）。",
+        "question": "沈阳地铁第 6 条开通运营的线路是（      ）。",
         "option_a": "3 号线",
         "option_b": "4 号线",
         "option_c": "9 号线",
@@ -48,7 +48,7 @@
         "correct_answer": "a"
     },
     {
-        "question": "沈阳地铁第 1 段开通运营的延长线是属于（      ）的延长线。",
+        "question": "沈阳地铁第 1 段开通运营的延长线是属于（      ）的延长线。",
         "option_a": "1 号线",
         "option_b": "2 号线",
         "option_c": "3 号线",
@@ -56,7 +56,7 @@
         "correct_answer": "b"
     },
     {
-        "question": "沈阳地铁第 2 段开通运营的延长线是属于（      ）的延长线。",
+        "question": "沈阳地铁第 2 段开通运营的延长线是属于（      ）的延长线。",
         "option_a": "1 号线",
         "option_b": "2 号线",
         "option_c": "3 号线",
@@ -64,7 +64,7 @@
         "correct_answer": "b"
     },
     {
-        "question": "沈阳地铁第 3 段开通运营的延长线是属于（      ）的延长线。",
+        "question": "沈阳地铁第 3 段开通运营的延长线是属于（      ）的延长线。",
         "option_a": "1 号线",
         "option_b": "2 号线",
         "option_c": "3 号线",
@@ -72,7 +72,7 @@
         "correct_answer": "b"
     },
     {
-        "question": "沈阳地铁第 4 段开通运营的延长线是属于（      ）的延长线。",
+        "question": "沈阳地铁第 4 段开通运营的延长线是属于（      ）的延长线。",
         "option_a": "1 号线",
         "option_b": "2 号线",
         "option_c": "3 号线",
