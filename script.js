@@ -166,6 +166,11 @@ document.addEventListener("DOMContentLoaded", function () {
         timerSpan.style.color = "black";
         document.querySelector(".info-bar").classList.add("center");
 
+        optionA.disabled = true;
+        optionB.disabled = true;
+        optionC.disabled = true;
+        optionD.disabled = true;
+
         btnSubmit.disabled = true;
 
         // 根据题库是否已就绪设置“开始作答”按钮
@@ -197,6 +202,11 @@ document.addEventListener("DOMContentLoaded", function () {
             btnAction.classList.remove("btn-primary");
             btnAction.classList.add("btn-secondary");
             btnAction.blur();
+
+            optionA.disabled = false;
+            optionB.disabled = false;
+            optionC.disabled = false;
+            optionD.disabled = false;
 
             btnSubmit.disabled = false;
             document.getElementById("progress").style.display = "inline";

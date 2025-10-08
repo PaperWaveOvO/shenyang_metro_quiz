@@ -111,9 +111,16 @@ body {
 }
 
 .option:disabled {
-    background-color: #e0e0e0;
+    background-color: #f6f6f6;
     color: #5b5b5b;
     cursor: not-allowed;
+}
+
+/* 禁用时强制覆盖 hover/active 效果 */
+.option:disabled:hover,
+.option:disabled:active {
+    background-color: #f6f6f6;
+    color: #5b5b5b;
 }
 
 .option:active {
@@ -176,6 +183,7 @@ body {
 .btn-secondary:disabled {
     color: #5b5b5b;
     background-color: #e0e0e0;
+    cursor: not-allowed;
 }
 
 .btn-danger {
