@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // —— 状态与定时器（都只做这件事：要么开，要么关）——
+    let questionBank = null;
+
     let sessionActive = false;       // 当前是否在一次“考试会话”中
     let mainIntervalId = null;       // 12 秒“正式倒计时”的 interval
 
@@ -24,15 +26,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnYes = document.getElementById("btn-exit-yes");
     const btnNo = document.getElementById("btn-exit-no");
 
+    fetch("data/question_bank.json")
+        .then(r => r.json())
+        .then(data => {
+            questionBank = data;
+            console.log("题库已加载，共", data.length, "题");
+        })
+        .catch(err => {
+            console.error("预加载题库失败：", err);
+        });
+
     function resetQuizUI() {
         // 题干先用占位（保持你想要的默认值）
         questionEl.textContent = "题干";
 
         // 选项也先用占位
-        optionA.textContent = "选项 A";
-        optionB.textContent = "选项 B";
-        optionC.textContent = "选项 C";
-        optionD.textContent = "选项 D";
+        optionA.textContent = "A 选项";
+        optionB.textContent = "B 选项";
+        optionC.textContent = "C 选项";
+        optionD.textContent = "D 选项";
     }
 
     // 工具：清空所有计时器
@@ -47,34 +59,35 @@ document.addEventListener("DOMContentLoaded", function () {
     function loadFirstQuestionThenStartMainCountdown() {
         if (!sessionActive) return;
 
-        fetch("data/question_bank.json")
-            .then(r => r.json())
-            .then(data => {
-                if (!sessionActive) return;
+        const useData = questionBank;
+        const loadData = () => {
+            if (!sessionActive) return;
 
-                // “共 x 题”
-                document.getElementById("total").textContent = data.length;
+            document.getElementById("total").textContent = useData.length;
 
-                // 用第 1 题填入题干与选项
-                const q = data[0];
-                document.getElementById("question-text").textContent = q.question; // CSS 已设 pre-wrap
+            const q = useData[0];
+            questionEl.textContent = q.question;
+            optionA.innerHTML = "<span class='label'>A.</span> " + q.option_a;
+            optionB.innerHTML = "<span class='label'>B.</span> " + q.option_b;
+            optionC.innerHTML = "<span class='label'>C.</span> " + q.option_c;
+            optionD.innerHTML = "<span class='label'>D.</span> " + q.option_d;
 
-                document.getElementById("btn-option-a").innerHTML =
-                    "<span class='label'>A.</span> " + q.option_a;
-                document.getElementById("btn-option-b").innerHTML =
-                    "<span class='label'>B.</span> " + q.option_b;
-                document.getElementById("btn-option-c").innerHTML =
-                    "<span class='label'>C.</span> " + q.option_c;
-                document.getElementById("btn-option-d").innerHTML =
-                    "<span class='label'>D.</span> " + q.option_d;
+            startMainCountdown();
+        };
 
-                // 写完题目，开始 12 秒正式倒计时
-                startMainCountdown();
-            })
-            .catch(err => {
-                console.error("读取题库失败：", err);
-                // 失败的话你也可以在题干处写“加载失败，请重试”
-            });
+        if (useData) {
+            loadData();
+        } else {
+            fetch("data/question_bank.json")
+                .then(r => r.json())
+                .then(data => {
+                    questionBank = data;
+                    loadData();
+                })
+                .catch(err => {
+                    console.error("读取题库失败：", err);
+                });
+        }
     }
 
     // 第三步：12 秒倒计时（0.1s 一跳）
