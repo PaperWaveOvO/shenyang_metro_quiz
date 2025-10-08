@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 timerSpan.textContent = "请在 " + sec + " 秒内作答";
             } else {
                 timerSpan.style.color = "red";
-                timerSpan.textContent = "作答超时，本题无效";
+                timerSpan.textContent = "作答超时";
                 clearInterval(mainIntervalId);
                 mainIntervalId = null;
             }
@@ -122,7 +122,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         hasStarted = false;                 // 重置为未开始
         timerSpan.textContent = "";         // 倒计时不动/不显示
-        btnAction.textContent = "开始考试";
+        btnAction.textContent = "开始作答";
         btnAction.classList.remove("btn-secondary");
         btnAction.classList.add("btn-primary");
     });
