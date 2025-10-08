@@ -39,6 +39,11 @@
     }
 }
 
+button, 
+.btn {
+    -webkit-tap-highlight-color: transparent; /* 去掉高亮 */
+}
+
 h1 {
     margin-bottom: 0px;
 }
