@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let sessionActive = false;       // 当前是否在一次“考试会话”中
     let mainIntervalId = null;       // 12 秒“正式倒计时”的 interval
 
+    let hasStarted = false;                      // 是否已经开始正式计时/作答
+
     // —— DOM 引用（都是真名实姓，读起来不费劲）——
     const btnStart = document.getElementById("btn-start");
     const home = document.getElementById("home");
@@ -14,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const optionB = document.getElementById("btn-option-b");
     const optionC = document.getElementById("btn-option-c");
     const optionD = document.getElementById("btn-option-d");
+    const btnAction = document.getElementById("btn-action");  // 切换用的单按钮
 
     const btnExit = document.getElementById("btn-exit");
 
@@ -56,13 +59,13 @@ document.addEventListener("DOMContentLoaded", function () {
                 const q = data[0];
                 document.getElementById("question-text").textContent = q.question; // CSS 已设 pre-wrap
 
-                document.getElementById("option-a").innerHTML =
+                document.getElementById("btn-option-a").innerHTML =
                     "<span class='label'>A.</span> " + q.option_a;
-                document.getElementById("option-b").innerHTML =
+                document.getElementById("btn-option-b").innerHTML =
                     "<span class='label'>B.</span> " + q.option_b;
-                document.getElementById("option-c").innerHTML =
+                document.getElementById("btn-option-c").innerHTML =
                     "<span class='label'>C.</span> " + q.option_c;
-                document.getElementById("option-d").innerHTML =
+                document.getElementById("btn-option-d").innerHTML =
                     "<span class='label'>D.</span> " + q.option_d;
 
                 // 写完题目，开始 12 秒正式倒计时
@@ -116,9 +119,31 @@ document.addEventListener("DOMContentLoaded", function () {
         quiz.classList.remove("hidden");
 
         timerSpan.style.color = "black";
-        timerSpan.textContent = "请在 12.0 秒内作答";  // 先放占位文本
 
-        loadFirstQuestionThenStartMainCountdown()
+        hasStarted = false;                 // 重置为未开始
+        timerSpan.textContent = "";         // 倒计时不动/不显示
+        btnAction.textContent = "开始考试";
+        btnAction.classList.remove("btn-secondary");
+        btnAction.classList.add("btn-primary");
+    });
+
+    btnAction.addEventListener("click", () => {
+        if (!hasStarted) {
+            // 第一次点击：从“待开始” -> “正式开始”
+            hasStarted = true;
+
+            // 外观：主按钮 -> 次按钮；文案变“跳过本题”
+            btnAction.textContent = "跳过本题";
+            btnAction.classList.remove("btn-primary");
+            btnAction.classList.add("btn-secondary");
+
+            // 启动题目加载 + 12 秒倒计时
+            loadFirstQuestionThenStartMainCountdown();
+        } else {
+            // 已经开始：执行“跳过本题”的行为（先留个占位，之后你接入换题逻辑）
+            // TODO: 在这里切到下一题；现在先给个占位
+            console.log("TODO: 跳过本题 -> 切到下一题");
+        }
     });
 
     // —— 退出答题弹窗 ——（跟你之前一样）
