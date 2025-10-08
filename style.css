@@ -70,6 +70,10 @@ body {
     font-size: var(--standard-font-size);
 }
 
+.info-bar.center {
+    justify-content: center;
+}
+
 /* 题干 */
 .question {
     font-size: 22px;

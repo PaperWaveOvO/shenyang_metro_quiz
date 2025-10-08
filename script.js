@@ -118,10 +118,15 @@ document.addEventListener("DOMContentLoaded", function () {
         home.classList.add("hidden");
         quiz.classList.remove("hidden");
 
+        hasStarted = false;
+        document.getElementById("progress").style.display = "none";   // 隐藏题号
+
+        timerSpan.textContent = "请在知悉页面布局后开始作答";
         timerSpan.style.color = "black";
 
-        hasStarted = false;                 // 重置为未开始
-        timerSpan.textContent = "";         // 倒计时不动/不显示
+        // 信息栏改为居中
+        document.querySelector(".info-bar").classList.add("center");
+
         btnAction.textContent = "开始作答";
         btnAction.classList.remove("btn-secondary");
         btnAction.classList.add("btn-primary");
@@ -136,6 +141,9 @@ document.addEventListener("DOMContentLoaded", function () {
             btnAction.textContent = "跳过本题";
             btnAction.classList.remove("btn-primary");
             btnAction.classList.add("btn-secondary");
+
+            document.getElementById("progress").style.display = "inline";   // 显示题号
+            document.querySelector(".info-bar").classList.remove("center"); // 左右布局
 
             // 启动题目加载 + 12 秒倒计时
             loadFirstQuestionThenStartMainCountdown();
