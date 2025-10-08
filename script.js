@@ -81,6 +81,12 @@ document.addEventListener("DOMContentLoaded", function () {
         optionC.innerHTML = "<span class='label'>C.</span> " + q.option_c;
         optionD.innerHTML = "<span class='label'>D.</span> " + q.option_d;
 
+        if (index === questionBank.length - 1) {
+            btnAction.disabled = true;
+        } else {
+            btnAction.disabled = false;
+        }
+
         startMainCountdown();
     }
 
@@ -108,6 +114,25 @@ document.addEventListener("DOMContentLoaded", function () {
                 timerSpan.textContent = "作答超时";
                 clearInterval(mainIntervalId);
                 mainIntervalId = null;
+
+                // ✅ 禁用选项和跳过按钮
+                optionA.disabled = true;
+                optionB.disabled = true;
+                optionC.disabled = true;
+                optionD.disabled = true;
+                btnAction.disabled = true;
+
+                // ✅ 0.5 秒后进入下一题并恢复按钮
+                setTimeout(() => {
+                    optionA.disabled = false;
+                    optionB.disabled = false;
+                    optionC.disabled = false;
+                    optionD.disabled = false;
+                    btnAction.disabled = false;
+
+                    currentIndex++;
+                    loadQuestion(currentIndex);
+                }, 1000);
             }
         }
 

@@ -96,22 +96,24 @@ body {
 
 /* 选项 */
 .option {
-    font-size: var(--standard-font-size);
-    -webkit-tap-highlight-color: transparent;
     width: 100%;
-    height: 50px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    font-size: 18px;
+    text-align: center;
+    border: 1.5px solid #cbcbcb;
     border-radius: 8px;
+    background-color: #ffffff;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    /* 垂直居中 */
-    justify-content: center;
-    /* 水平居中 */
 }
 
-.option:hover {
-    background-color: #f0f0f0;
+.option:hover:not(:disabled) {
+    background-color: #dcdcdc;
+}
+
+.option:disabled {
+    background-color: #e0e0e0;
+    color: #5b5b5b;
+    cursor: not-allowed;
 }
 
 .option:active {
@@ -142,13 +144,6 @@ body {
     cursor: pointer;
 }
 
-#btn-submit:disabled {
-    color: #5b5b5b;
-    background-color: #e0e0e0;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
 .btn-primary {
     margin-bottom: var(--btn-gap);
     background-color: #006eff;
@@ -176,6 +171,11 @@ body {
 .btn-secondary:active {
     background-color: #d1d1d1;
     /* 按下 */
+}
+
+.btn-secondary:disabled {
+    color: #5b5b5b;
+    background-color: #e0e0e0;
 }
 
 .btn-danger {
