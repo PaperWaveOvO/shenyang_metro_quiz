@@ -1,11 +1,15 @@
 document.addEventListener("DOMContentLoaded", function () {
     // —— 状态与定时器（都只做这件事：要么开，要么关）——
     let questionBank = null;
+    let bankReady = null;
 
     let sessionActive = false;       // 当前是否在一次“考试会话”中
     let mainIntervalId = null;       // 12 秒“正式倒计时”的 interval
 
     let hasStarted = false;                      // 是否已经开始正式计时/作答
+
+    let currentIndex = 0;   // 当前题号
+    let score = 0;          // 得分
 
     // —— DOM 引用（都是真名实姓，读起来不费劲）——
     const btnStart = document.getElementById("btn-start");
@@ -27,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnYes = document.getElementById("btn-exit-yes");
     const btnNo = document.getElementById("btn-exit-no");
 
-    fetch("data/question_bank.json")
+    bankReady = fetch("data/question_bank.json")
         .then(r => r.json())
         .then(data => {
             questionBank = data;
@@ -57,38 +61,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 加载第一题 -> 写入页面 -> 开始 12 秒倒计时
-    function loadFirstQuestionThenStartMainCountdown() {
+    function loadQuestion(index) {
         if (!sessionActive) return;
+        if (!questionBank) return;
 
-        const useData = questionBank;
-        const loadData = () => {
-            if (!sessionActive) return;
-
-            document.getElementById("total").textContent = useData.length;
-
-            const q = useData[0];
-            questionEl.textContent = q.question;
-            optionA.innerHTML = "<span class='label'>A.</span> " + q.option_a;
-            optionB.innerHTML = "<span class='label'>B.</span> " + q.option_b;
-            optionC.innerHTML = "<span class='label'>C.</span> " + q.option_c;
-            optionD.innerHTML = "<span class='label'>D.</span> " + q.option_d;
-
-            startMainCountdown();
-        };
-
-        if (useData) {
-            loadData();
-        } else {
-            fetch("data/question_bank.json")
-                .then(r => r.json())
-                .then(data => {
-                    questionBank = data;
-                    loadData();
-                })
-                .catch(err => {
-                    console.error("读取题库失败：", err);
-                });
+        if (index >= questionBank.length) {
+            console.log("题目答完啦，总分：" + score);
+            // TODO: 在这里显示成绩页面
+            return;
         }
+
+        const q = questionBank[index];
+        document.getElementById("total").textContent = questionBank.length;
+        document.getElementById("current").textContent = index + 1;
+
+        questionEl.textContent = q.question;
+        optionA.innerHTML = "<span class='label'>A.</span> " + q.option_a;
+        optionB.innerHTML = "<span class='label'>B.</span> " + q.option_b;
+        optionC.innerHTML = "<span class='label'>C.</span> " + q.option_c;
+        optionD.innerHTML = "<span class='label'>D.</span> " + q.option_d;
+
+        startMainCountdown();
     }
 
     // 第三步：12 秒倒计时（0.1s 一跳）
@@ -122,55 +115,88 @@ document.addEventListener("DOMContentLoaded", function () {
         mainIntervalId = setInterval(render, 100);
     }
 
+    function handleAnswer(choice) {
+        const q = questionBank[currentIndex];
+        if (choice === q.correct_answer) {
+            score++;
+            console.log("答对啦！当前得分：" + score);
+        } else {
+            console.log("答错啦！");
+        }
+
+        currentIndex++;
+        loadQuestion(currentIndex);
+    }
+
+    optionA.addEventListener("click", () => handleAnswer("a"));
+    optionB.addEventListener("click", () => handleAnswer("b"));
+    optionC.addEventListener("click", () => handleAnswer("c"));
+    optionD.addEventListener("click", () => handleAnswer("d"));
+
     // —— 开始答题 ——（切到答题页 → 先显示 5s 准备倒计时）
     btnStart.addEventListener("click", () => {
-        sessionActive = true;       // 开始一次新的会话
-        clearAllTimers();           // 保底：把旧的都停掉
-
+        sessionActive = true;
+        clearAllTimers();
         resetQuizUI();
 
         home.classList.add("hidden");
         quiz.classList.remove("hidden");
 
         hasStarted = false;
-        document.getElementById("progress").style.display = "none";   // 隐藏题号
-
+        document.getElementById("progress").style.display = "none";
         timerSpan.textContent = "请在知悉页面布局后开始作答";
         timerSpan.style.color = "black";
-
-        // 信息栏改为居中
         document.querySelector(".info-bar").classList.add("center");
 
-        btnSubmit.disabled = true
+        btnSubmit.disabled = true;
 
-        btnAction.textContent = "开始作答";
-        btnAction.classList.remove("btn-secondary");
-        btnAction.classList.add("btn-primary");
+        // ✅ 根据题库是否已就绪设置“开始作答”按钮
+        if (questionBank) {
+            btnAction.textContent = "开始作答";
+            btnAction.disabled = false;
+            btnAction.classList.remove("btn-secondary");
+            btnAction.classList.add("btn-primary");
+        } else {
+            btnAction.textContent = "加载中…";
+            btnAction.disabled = true; // 题库未就绪先禁用
+            btnAction.classList.remove("btn-secondary");
+            btnAction.classList.add("btn-primary");
+
+            // 题库就绪后自动恢复
+            bankReady?.then(() => {
+                if (!sessionActive || hasStarted) return; // 已退出或已开始就不改了
+                btnAction.textContent = "开始作答";
+                btnAction.disabled = false;
+            });
+        }
     });
 
-    btnAction.addEventListener("click", () => {
+    btnAction.addEventListener("click", async () => {
         if (!hasStarted) {
-            // 第一次点击：从“待开始” -> “正式开始”
             hasStarted = true;
 
-            // 外观：主按钮 -> 次按钮；文案变“跳过本题”
             btnAction.textContent = "跳过本题";
             btnAction.classList.remove("btn-primary");
             btnAction.classList.add("btn-secondary");
-
             btnAction.blur();
 
-            btnSubmit.disabled = false
+            btnSubmit.disabled = false;
+            document.getElementById("progress").style.display = "inline";
+            document.querySelector(".info-bar").classList.remove("center");
 
-            document.getElementById("progress").style.display = "inline";   // 显示题号
-            document.querySelector(".info-bar").classList.remove("center"); // 左右布局
+            currentIndex = 0;
+            score = 0;
 
-            // 启动题目加载 + 12 秒倒计时
-            loadFirstQuestionThenStartMainCountdown();
+            // ✅ 关键：确保题库已就绪
+            if (!questionBank) {
+                try { await bankReady; } catch (e) { console.error(e); return; }
+                if (!questionBank) return; // 失败就别往下走了
+            }
+
+            loadQuestion(currentIndex);
         } else {
-            // 已经开始：执行“跳过本题”的行为（先留个占位，之后你接入换题逻辑）
-            // TODO: 在这里切到下一题；现在先给个占位
-            console.log("TODO: 跳过本题 -> 切到下一题");
+            currentIndex++;
+            loadQuestion(currentIndex);
         }
     });
 
