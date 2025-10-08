@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const optionC = document.getElementById("btn-option-c");
     const optionD = document.getElementById("btn-option-d");
     const btnAction = document.getElementById("btn-action");  // 切换用的单按钮
+    const btnSubmit = document.getElementById("btn-submit");
 
     const btnExit = document.getElementById("btn-exit");
 
@@ -140,6 +141,8 @@ document.addEventListener("DOMContentLoaded", function () {
         // 信息栏改为居中
         document.querySelector(".info-bar").classList.add("center");
 
+        btnSubmit.disabled = true
+
         btnAction.textContent = "开始作答";
         btnAction.classList.remove("btn-secondary");
         btnAction.classList.add("btn-primary");
@@ -154,6 +157,8 @@ document.addEventListener("DOMContentLoaded", function () {
             btnAction.textContent = "跳过本题";
             btnAction.classList.remove("btn-primary");
             btnAction.classList.add("btn-secondary");
+
+            btnSubmit.disabled = false
 
             document.getElementById("progress").style.display = "inline";   // 显示题号
             document.querySelector(".info-bar").classList.remove("center"); // 左右布局

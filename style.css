@@ -81,9 +81,12 @@ body {
     font-weight: bold;
     min-height: 120px;
     display: flex;
-    align-items: center;       /* 垂直居中 */
-    justify-content: center;   /* 水平居中 */
-    text-align: center;        /* 文字多行时也居中 */
+    align-items: center;
+    /* 垂直居中 */
+    justify-content: center;
+    /* 水平居中 */
+    text-align: center;
+    /* 文字多行时也居中 */
 }
 
 /* 选项 */
@@ -131,6 +134,13 @@ body {
     border: none;
     border-radius: 8px;
     cursor: pointer;
+}
+
+#btn-submit:disabled {
+    color: #5b5b5b;
+    background-color: #e0e0e0;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .btn-primary {
@@ -237,10 +247,11 @@ body {
     white-space: pre-wrap;
 }
 
-#quiz > * {
-  margin: 0;
+#quiz>* {
+    margin: 0;
 }
 
 .spacer {
-  height: var(--space, 10px);   /* 默认 10px */
+    height: var(--space, 10px);
+    /* 默认 10px */
 }
