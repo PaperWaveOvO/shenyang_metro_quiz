@@ -97,6 +97,7 @@ body {
 /* 选项 */
 .option {
     font-size: var(--standard-font-size);
+    -webkit-tap-highlight-color: transparent;
     width: 100%;
     height: 50px;
     border: 1px solid #ccc;
