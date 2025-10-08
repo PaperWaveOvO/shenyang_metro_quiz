@@ -31,6 +31,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnYes = document.getElementById("btn-exit-yes");
     const btnNo = document.getElementById("btn-exit-no");
 
+    const result = document.getElementById("result");
+
     bankReady = fetch("data/question_bank.json")
         .then(r => r.json())
         .then(data => {
@@ -66,8 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!questionBank) return;
 
         if (index >= questionBank.length) {
-            console.log("题目答完啦，总分：" + score);
-            // TODO: 在这里显示成绩页面
+            quiz.classList.add("hidden");
+            result.classList.remove("hidden");
             return;
         }
 
@@ -80,12 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
         optionB.innerHTML = "<span class='label'>B.</span> " + q.option_b;
         optionC.innerHTML = "<span class='label'>C.</span> " + q.option_c;
         optionD.innerHTML = "<span class='label'>D.</span> " + q.option_d;
-
-        if (index === questionBank.length - 1) {
-            btnAction.disabled = true;
-        } else {
-            btnAction.disabled = false;
-        }
 
         startMainCountdown();
     }
@@ -115,14 +111,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 clearInterval(mainIntervalId);
                 mainIntervalId = null;
 
-                // ✅ 禁用选项和跳过按钮
+                // 禁用选项和跳过按钮
                 optionA.disabled = true;
                 optionB.disabled = true;
                 optionC.disabled = true;
                 optionD.disabled = true;
                 btnAction.disabled = true;
 
-                // ✅ 0.5 秒后进入下一题并恢复按钮
+                // 1 秒后进入下一题并恢复按钮
                 setTimeout(() => {
                     optionA.disabled = false;
                     optionB.disabled = false;
@@ -144,9 +140,6 @@ document.addEventListener("DOMContentLoaded", function () {
         const q = questionBank[currentIndex];
         if (choice === q.correct_answer) {
             score++;
-            console.log("答对啦！当前得分：" + score);
-        } else {
-            console.log("答错啦！");
         }
 
         currentIndex++;
@@ -175,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         btnSubmit.disabled = true;
 
-        // ✅ 根据题库是否已就绪设置“开始作答”按钮
+        // 根据题库是否已就绪设置“开始作答”按钮
         if (questionBank) {
             btnAction.textContent = "开始作答";
             btnAction.disabled = false;
@@ -212,7 +205,7 @@ document.addEventListener("DOMContentLoaded", function () {
             currentIndex = 0;
             score = 0;
 
-            // ✅ 关键：确保题库已就绪
+            // 关键：确保题库已就绪
             if (!questionBank) {
                 try { await bankReady; } catch (e) { console.error(e); return; }
                 if (!questionBank) return; // 失败就别往下走了
