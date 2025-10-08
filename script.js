@@ -1,44 +1,142 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let preCountdownTimer = null;   // 5s 准备倒计时
-    let countdownInterval = null;   // 10s 正式倒计时
-    let runToken = 0;               // 令牌：防止旧回调生效
+    // —— 状态与定时器（都只做这件事：要么开，要么关）——
+    let sessionActive = false;       // 当前是否在一次“考试会话”中
+    let preIntervalId = null;        // 5 秒“准备倒计时”的 interval
+    let mainIntervalId = null;       // 10 秒“正式倒计时”的 interval
 
-    // —— 新增：数据缓存 & 等待标记 ——
-    let dataCache = null;           // 题库缓存（数组）
-    let pendingPopulateToken = null;// 等待“填题”的那一轮 token（5s 到点了但数据还没回来时使用）
-
+    // —— DOM 引用（都是真名实姓，读起来不费劲）——
     const btnStart = document.getElementById("btn-start");
     const home = document.getElementById("home");
     const quiz = document.getElementById("quiz");
     const timerSpan = document.getElementById("timer");
 
-    const preHint = document.querySelector('#quiz .pre-hint');              // <p class="pre-hint">…
-    const examRemain = document.getElementById('exam-remaining-time');
+    const questionEl = document.getElementById("question-text");
+    const optionA = document.getElementById("btn-option-a");
+    const optionB = document.getElementById("btn-option-b");
+    const optionC = document.getElementById("btn-option-c");
+    const optionD = document.getElementById("btn-option-d");
 
-    const btnExit = document.querySelector("#quiz .btn-danger");
+    const preHint = document.getElementById("pre-hint");
+    const examRemain = document.getElementById("exam-remaining-time");
+
+    const btnExit = document.getElementById("btn-exit");
+
     const modal = document.getElementById("exit-modal");
     const btnYes = document.getElementById("btn-exit-yes");
     const btnNo = document.getElementById("btn-exit-no");
 
-    function clearAllTimers() {
-        if (preCountdownTimer) { clearInterval(preCountdownTimer); preCountdownTimer = null; }
-        if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+    function resetQuizUI() {
+        // 题干先用占位（保持你想要的默认值）
+        questionEl.textContent = "题干";
+
+        // 选项也先用占位
+        optionA.textContent = "选项 A";
+        optionB.textContent = "选项 B";
+        optionC.textContent = "选项 C";
+        optionD.textContent = "选项 D";
+
+        // 计时占位
+        timerSpan.style.color = "black";
+        timerSpan.textContent = "请在 10.0 秒内作答";
+
+        // 预提示先隐藏（startPreCountdown 会显示并驱动它）
+        if (preHint) {
+            preHint.style.display = "none";
+            if (examRemain) examRemain.textContent = "5.0";
+        }
     }
 
-    function startCountdown(currentToken) {
-        if (countdownInterval) { clearInterval(countdownInterval); countdownInterval = null; }
+    // 工具：清空所有计时器
+    function clearAllTimers() {
+        if (preIntervalId) {
+            clearInterval(preIntervalId);
+            preIntervalId = null;
+        }
+        if (mainIntervalId) {
+            clearInterval(mainIntervalId);
+            mainIntervalId = null;
+        }
+    }
 
-        const duration = 10000;
-        const start = performance.now();
+    // 第一步：显示 5 秒“准备倒计时”，结束后再真正加载题目并开始 10 秒倒计时
+    function startPreCountdown() {
+        preHint.style.display = "block";   // 显示提示条
+        examRemain.textContent = "8.0";    // 重置数字
 
-        function render() {
-            if (currentToken !== runToken) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
+        const total = 8000;                 // 8 秒
+        const startAt = performance.now();  // 记录开始时间
+
+        // 每 100ms 刷一次数
+        preIntervalId = setInterval(() => {
+            if (!sessionActive) { // 如果用户中途退出了
+                clearAllTimers();
                 return;
             }
-            const elapsed = performance.now() - start;
-            const left = Math.max(0, duration - elapsed);
+
+            const elapsed = performance.now() - startAt;
+            const left = Math.max(0, total - elapsed);
+            const sec = (left / 1000).toFixed(1);  // 保留一位小数
+            examRemain.textContent = sec;
+
+            if (left <= 0) {
+                clearInterval(preIntervalId);
+                preIntervalId = null;
+                preHint.style.display = "none"; // 隐藏提示条
+
+                // 现在开始真正“加载题目并启动 10 秒倒计时”
+                loadFirstQuestionThenStartMainCountdown();
+            }
+        }, 100);
+    }
+
+    // 第二步：加载第一题 -> 写入页面 -> 开始 10 秒倒计时
+    function loadFirstQuestionThenStartMainCountdown() {
+        if (!sessionActive) return;
+
+        fetch("data/question_bank.json")
+            .then(r => r.json())
+            .then(data => {
+                if (!sessionActive) return;
+
+                // “共 x 题”
+                document.getElementById("total").textContent = data.length;
+
+                // 用第 1 题填入题干与选项
+                const q = data[0];
+                document.getElementById("question-text").textContent = q.question; // CSS 已设 pre-wrap
+
+                document.getElementById("option-a").innerHTML =
+                    "<span class='label'>A.</span> " + q.option_a;
+                document.getElementById("option-b").innerHTML =
+                    "<span class='label'>B.</span> " + q.option_b;
+                document.getElementById("option-c").innerHTML =
+                    "<span class='label'>C.</span> " + q.option_c;
+                document.getElementById("option-d").innerHTML =
+                    "<span class='label'>D.</span> " + q.option_d;
+
+                // 写完题目，开始 10 秒正式倒计时
+                startMainCountdown();
+            })
+            .catch(err => {
+                console.error("读取题库失败：", err);
+                // 失败的话你也可以在题干处写“加载失败，请重试”
+            });
+    }
+
+    // 第三步：10 秒倒计时（0.1s 一跳）
+    function startMainCountdown() {
+        if (mainIntervalId) { clearInterval(mainIntervalId); mainIntervalId = null; }
+
+        const total = 12000;                // 10 秒
+        const startAt = performance.now();
+
+        function render() {
+            if (!sessionActive) {             // 用户中途退出
+                clearAllTimers();
+                return;
+            }
+            const elapsed = performance.now() - startAt;
+            const left = Math.max(0, total - elapsed);
             const sec = (left / 1000).toFixed(1);
 
             if (left > 0) {
@@ -47,123 +145,52 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 timerSpan.style.color = "red";
                 timerSpan.textContent = "作答超时，本题无效";
-                clearInterval(countdownInterval);
-                countdownInterval = null;
+                clearInterval(mainIntervalId);
+                mainIntervalId = null;
             }
         }
 
-        render();
-        countdownInterval = setInterval(render, 100);
+        render(); // 先渲染一帧
+        mainIntervalId = setInterval(render, 100);
     }
 
-    // —— 把“把第1题写进页面 + 启动10s计时”封装一下 ——
-    function populateFirstQuestionAndStart(currentToken) {
-        if (currentToken !== runToken) return;
-        if (!dataCache || !Array.isArray(dataCache) || dataCache.length === 0) return;
-
-        const q = dataCache[0];
-        document.getElementById("question-text").textContent = q.question; // CSS 已 pre-wrap
-
-        document.getElementById("option-a").innerHTML = "<span class='label'>A.</span> " + q.option_a;
-        document.getElementById("option-b").innerHTML = "<span class='label'>B.</span> " + q.option_b;
-        document.getElementById("option-c").innerHTML = "<span class='label'>C.</span> " + q.option_c;
-        document.getElementById("option-d").innerHTML = "<span class='label'>D.</span> " + q.option_d;
-
-        startCountdown(currentToken);
-    }
-
-    // —— 5 秒准备倒计时：结束后才“填题+开计时” ——
-    function startPreCountdown(currentToken) {
-        preHint.style.display = 'block';
-        examRemain.textContent = '5.0';
-
-        const duration = 5000;
-        const startAt = performance.now();
-
-        if (preCountdownTimer) { clearInterval(preCountdownTimer); }
-        preCountdownTimer = setInterval(() => {
-            if (currentToken !== runToken) {
-                clearInterval(preCountdownTimer);
-                preCountdownTimer = null;
-                return;
-            }
-            const elapsed = performance.now() - startAt;
-            const left = Math.max(0, duration - elapsed);
-            const sec = (left / 1000).toFixed(1);
-            examRemain.textContent = sec;
-
-            if (left <= 0) {
-                clearInterval(preCountdownTimer);
-                preCountdownTimer = null;
-                preHint.style.display = 'none';
-
-                // 到点了：如果数据已就绪，立即填题；否则记下“等待填题”
-                if (dataCache) {
-                    populateFirstQuestionAndStart(currentToken);
-                } else {
-                    pendingPopulateToken = currentToken;
-                    // 你也可以在这里把题干/选项临时显示为“加载中…”，看喜好：
-                    // document.getElementById("question-text").textContent = "加载中…";
-                }
-            }
-        }, 100);
-    }
-
-    // —— 开始答题：先切页与5秒准备，然后去拉数据，仅先填“共 x 题” ——
+    // —— 开始答题 ——（切到答题页 → 先显示 5s 准备倒计时）
     btnStart.addEventListener("click", () => {
-        runToken++;
-        clearAllTimers();
+        sessionActive = true;       // 开始一次新的会话
+        clearAllTimers();           // 保底：把旧的都停掉
+
+        resetQuizUI();
 
         home.classList.add("hidden");
         quiz.classList.remove("hidden");
 
         timerSpan.style.color = "black";
-        timerSpan.textContent = "请在 10.0 秒内作答";
+        timerSpan.textContent = "请在 12.0 秒内作答";  // 先放占位文本
 
-        const myToken = runToken;
-        startPreCountdown(myToken);
-
-        // 拉题库：先只更新“共 x 题”，缓存数据；题干&选项等5秒结束再填
-        fetch("data/question_bank.json")
-            .then(r => {
-                if (!r.ok) throw new Error("HTTP " + r.status);
-                return r.json();
-            })
-            .then(data => {
-                if (myToken !== runToken) return;     // 中途退出或重开
-                dataCache = data;
-
-                // 立刻更新“共 x 题”
-                document.getElementById("total").textContent = dataCache.length;
-
-                // 如果 5 秒刚好已经结束且在等数据，立刻补上题干&选项并启动 10s
-                if (pendingPopulateToken === myToken) {
-                    pendingPopulateToken = null;
-                    populateFirstQuestionAndStart(myToken);
-                }
-            })
-            .catch(err => {
-                console.error("读取题库失败：", err);
-            });
+        startPreCountdown();        // 进入 8 秒准备
     });
 
-    // —— 退出弹窗逻辑保持不变 ——
+    // —— 退出答题弹窗 ——（跟你之前一样）
     btnExit.addEventListener("click", () => {
         modal.style.display = "flex";
     });
+
     btnNo.addEventListener("click", () => {
         modal.style.display = "none";
     });
+
     btnYes.addEventListener("click", () => {
-        runToken++;           // 让在路上的回调失效
+        // 彻底结束本次会话
+        sessionActive = false;
         clearAllTimers();
         timerSpan.textContent = "";
-        pendingPopulateToken = null;   // 这一轮的“等填题”也作废
 
         quiz.classList.add("hidden");
         home.classList.remove("hidden");
         modal.style.display = "none";
     });
+
+    // 点击遮罩关闭
     modal.addEventListener("click", (e) => {
         if (e.target === modal) modal.style.display = "none";
     });
