@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     // —— 状态与定时器（都只做这件事：要么开，要么关）——
     let sessionActive = false;       // 当前是否在一次“考试会话”中
-    let preIntervalId = null;        // 5 秒“准备倒计时”的 interval
-    let mainIntervalId = null;       // 10 秒“正式倒计时”的 interval
+    let mainIntervalId = null;       // 12 秒“正式倒计时”的 interval
 
     // —— DOM 引用（都是真名实姓，读起来不费劲）——
     const btnStart = document.getElementById("btn-start");
@@ -15,9 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const optionB = document.getElementById("btn-option-b");
     const optionC = document.getElementById("btn-option-c");
     const optionD = document.getElementById("btn-option-d");
-
-    const preHint = document.getElementById("pre-hint");
-    const examRemain = document.getElementById("exam-remaining-time");
 
     const btnExit = document.getElementById("btn-exit");
 
@@ -34,62 +30,17 @@ document.addEventListener("DOMContentLoaded", function () {
         optionB.textContent = "选项 B";
         optionC.textContent = "选项 C";
         optionD.textContent = "选项 D";
-
-        // 计时占位
-        timerSpan.style.color = "black";
-        timerSpan.textContent = "请在 10.0 秒内作答";
-
-        // 预提示先隐藏（startPreCountdown 会显示并驱动它）
-        if (preHint) {
-            preHint.style.display = "none";
-            if (examRemain) examRemain.textContent = "5.0";
-        }
     }
 
     // 工具：清空所有计时器
     function clearAllTimers() {
-        if (preIntervalId) {
-            clearInterval(preIntervalId);
-            preIntervalId = null;
-        }
         if (mainIntervalId) {
             clearInterval(mainIntervalId);
             mainIntervalId = null;
         }
     }
 
-    // 第一步：显示 5 秒“准备倒计时”，结束后再真正加载题目并开始 10 秒倒计时
-    function startPreCountdown() {
-        preHint.style.display = "block";   // 显示提示条
-        examRemain.textContent = "8.0";    // 重置数字
-
-        const total = 8000;                 // 8 秒
-        const startAt = performance.now();  // 记录开始时间
-
-        // 每 100ms 刷一次数
-        preIntervalId = setInterval(() => {
-            if (!sessionActive) { // 如果用户中途退出了
-                clearAllTimers();
-                return;
-            }
-
-            const elapsed = performance.now() - startAt;
-            const left = Math.max(0, total - elapsed);
-            const sec = (left / 1000).toFixed(1);  // 保留一位小数
-            examRemain.textContent = sec;
-
-            if (left <= 0) {
-                clearInterval(preIntervalId);
-                preIntervalId = null;
-                preHint.style.display = "none"; // 隐藏提示条
-
-                // 现在开始真正“加载题目并启动 10 秒倒计时”
-                loadFirstQuestionThenStartMainCountdown();
-            }
-        }, 100);
-    }
-
-    // 第二步：加载第一题 -> 写入页面 -> 开始 10 秒倒计时
+    // 加载第一题 -> 写入页面 -> 开始 12 秒倒计时
     function loadFirstQuestionThenStartMainCountdown() {
         if (!sessionActive) return;
 
@@ -114,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("option-d").innerHTML =
                     "<span class='label'>D.</span> " + q.option_d;
 
-                // 写完题目，开始 10 秒正式倒计时
+                // 写完题目，开始 12 秒正式倒计时
                 startMainCountdown();
             })
             .catch(err => {
@@ -123,11 +74,11 @@ document.addEventListener("DOMContentLoaded", function () {
             });
     }
 
-    // 第三步：10 秒倒计时（0.1s 一跳）
+    // 第三步：12 秒倒计时（0.1s 一跳）
     function startMainCountdown() {
         if (mainIntervalId) { clearInterval(mainIntervalId); mainIntervalId = null; }
 
-        const total = 12000;                // 10 秒
+        const total = 12000;
         const startAt = performance.now();
 
         function render() {
@@ -167,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
         timerSpan.style.color = "black";
         timerSpan.textContent = "请在 12.0 秒内作答";  // 先放占位文本
 
-        startPreCountdown();        // 进入 8 秒准备
+        loadFirstQuestionThenStartMainCountdown()
     });
 
     // —— 退出答题弹窗 ——（跟你之前一样）
