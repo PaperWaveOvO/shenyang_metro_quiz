@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
         startPreCountdown(myToken);
 
         // 拉题库：先只更新“共 x 题”，缓存数据；题干&选项等5秒结束再填
-        fetch("/shenyang_metro_quiz/data/question_bank.json")
+        fetch("data/question_bank.json")
             .then(r => {
                 if (!r.ok) throw new Error("HTTP " + r.status);
                 return r.json();
