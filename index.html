@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>沈阳地铁综合能力测试程序</title>
+
+    <link rel="stylesheet" href="/shenyang_metro_quiz/style.css">
+</head>
+
+<body>
+    <div class="modal-overlay" id="exit-modal">
+        <div class="modal">
+            <h2>确认退出答题？</h2>
+            <p>退出后所有作答将作废。</p>
+            <div class="modal-actions">
+                <button id="btn-exit-yes" class="btn btn-danger">是</button>
+                <button id="btn-exit-no" class="btn btn-secondary">否</button>
+            </div>
+        </div>
+    </div>
+    <div class="container" id="home">
+        <h1 id="title">沈阳地铁</h1>
+        <h2 id="subtitle">综合能力测试程序</h2>
+
+        <div class="stretch"></div>
+
+        <p>共 10 题，每题 5 分，满分 100 分<br>每题作答时间 10 秒</p>
+
+        <div class="stretch"></div>
+
+        <p style="color: red;">考试过程中请勿查阅任何资料</p>
+
+        <div class="stretch"></div>
+
+        <p class="p-programmer">By 纸浪i</p>
+
+        <button id="btn-start" class="btn-primary">开始答题</button>
+
+        <button id="btn-about" class="btn-secondary">关于此程序</button>
+    </div>
+
+    <div class="container hidden" id="quiz">
+        <div class="info-bar">
+            <span id="progress">第 1 题 / 共 <span id="total">10</span> 题</span>
+            <span id="timer">请在 10.0 秒内作答</span>
+        </div>
+        
+        <div class="stretch"></div>
+        
+        <p class="pre-hint" id="pre-hint">考试将在 <span id="exam-remaining-time">5</span> 秒后开始，请熟悉页面布局</p>
+
+        <div class="question" id="question-text">题干</div>
+
+        <div class="stretch"></div>
+
+        <div class="options">
+            <div class="option" id="btn-option-a">选项 A</div>
+            <div class="option" id="btn-option-b">选项 B</div>
+            <div class="option" id="btn-option-c">选项 C</div>
+            <div class="option" id="btn-option-d">选项 D</div>
+        </div>
+
+        <div class="stretch"></div>
+
+        <button class="btn btn-secondary btn-skip">跳过本题</button>
+
+        <div class="spacer" style="--space: 10px;"></div>
+
+        <div class="btn-group">
+            <button class="btn btn-secondary" id="btn-submit">交卷</button>
+            <button class="btn btn-danger" id="btn-exit">退出答题</button>
+        </div>
+    </div>
+    <script src="/shenyang_metro_quiz/script.js"></script>
+</body>
+
+</html>
