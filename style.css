@@ -4,6 +4,14 @@
     box-sizing: border-box;
 }
 
+button,
+input,
+select,
+textarea {
+    font: inherit;
+    /* 让控件继承 body/html 的默认（浏览器默认） */
+}
+
 :root {
     --btn-gap: 10px;
     --standard-font-size: 18px;
@@ -153,7 +161,6 @@ body {
 }
 
 .btn-primary {
-    margin-bottom: var(--btn-gap);
     background-color: #006eff;
     color: #fff;
 }
@@ -272,28 +279,35 @@ body {
 }
 
 .scoreboard {
-  display: inline-block; /* 让整个模块内容宽度只包裹内容 */
-  text-align: left;      /* 内容靠左 */
-  margin: 0 auto;        /* 居中容器 */
-  font-size: 18px;
+    display: inline-block;
+    /* 让整个模块内容宽度只包裹内容 */
+    text-align: left;
+    /* 内容靠左 */
+    margin: 0 auto;
+    /* 居中容器 */
+    font-size: 18px;
 }
 
 .scoreboard div {
-  display: flex;
-  justify-content: flex-start; /* 不要 space-between */
-  gap: 20px;                   /* 左右留点间距 */
-  margin: 6px 0;
+    display: flex;
+    justify-content: flex-start;
+    /* 不要 space-between */
+    gap: 20px;
+    /* 左右留点间距 */
+    margin: 6px 0;
 }
 
 .scoreboard dt {
-  font-weight: bold;
-  min-width: 90px; /* 让冒号前部分对齐 */
+    font-weight: bold;
+    min-width: 90px;
+    /* 让冒号前部分对齐 */
 }
 
 .scoreboard dd {
-  margin: 0;
+    margin: 0;
 }
 
 #btn-back {
-  margin-top: auto;   /* 把前面的内容都推上去，自己贴到底部 */
+    margin-top: auto;
+    /* 把前面的内容都推上去，自己贴到底部 */
 }

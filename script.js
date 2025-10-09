@@ -273,4 +273,15 @@ document.addEventListener("DOMContentLoaded", function () {
     modal.addEventListener("click", (e) => {
         if (e.target === modal) modal.style.display = "none";
     });
+
+    btnBack.addEventListener("click", () => {
+        sessionActive = false;        // 🔑 彻底结束会话
+        clearAllTimers();             // 停止倒计时
+        currentIndex = 0;             // 重置题号
+        score = 0;                    // 重置分数
+
+        quiz.classList.add("hidden");
+        result.classList.add("hidden");
+        home.classList.remove("hidden");
+    });
 });
