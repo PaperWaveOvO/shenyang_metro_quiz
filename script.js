@@ -33,6 +33,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const result = document.getElementById("result");
 
+    const totalScore = document.getElementById("total-score");
+    const correctCount = document.getElementById("correct-count");
+    const wrongCount = document.getElementById("wrong-count");
+
+    const btnBack = document.getElementById("btn-back");
+
     bankReady = fetch("data/question_bank.json")
         .then(r => r.json())
         .then(data => {
@@ -70,6 +76,11 @@ document.addEventListener("DOMContentLoaded", function () {
         if (index >= questionBank.length) {
             quiz.classList.add("hidden");
             result.classList.remove("hidden");
+
+            totalScore.textContent = score * 100 / questionBank.length;
+            correctCount.textContent = score;
+            wrongCount.textContent = questionBank.length - score;
+
             return;
         }
 

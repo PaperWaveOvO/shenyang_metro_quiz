@@ -39,9 +39,10 @@
     }
 }
 
-button, 
+button,
 .btn {
-    -webkit-tap-highlight-color: transparent; /* 去掉高亮 */
+    -webkit-tap-highlight-color: transparent;
+    /* 去掉高亮 */
 }
 
 h1 {
@@ -268,4 +269,31 @@ body {
 .spacer {
     height: var(--space, 10px);
     /* 默认 10px */
+}
+
+.scoreboard {
+  display: inline-block; /* 让整个模块内容宽度只包裹内容 */
+  text-align: left;      /* 内容靠左 */
+  margin: 0 auto;        /* 居中容器 */
+  font-size: 18px;
+}
+
+.scoreboard div {
+  display: flex;
+  justify-content: flex-start; /* 不要 space-between */
+  gap: 20px;                   /* 左右留点间距 */
+  margin: 6px 0;
+}
+
+.scoreboard dt {
+  font-weight: bold;
+  min-width: 90px; /* 让冒号前部分对齐 */
+}
+
+.scoreboard dd {
+  margin: 0;
+}
+
+#btn-back {
+  margin-top: auto;   /* 把前面的内容都推上去，自己贴到底部 */
 }

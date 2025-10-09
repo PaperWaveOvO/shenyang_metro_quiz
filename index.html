@@ -71,7 +71,24 @@
     <div class="container hidden" id="result">
         <h1>本次测试已完成</h1>
         <h2>感谢参与</h2>
+
+        <dl class="scoreboard">
+            <div>
+                <dt>总分：</dt>
+                <dd><span id="total-score">0</span> / 100</dd>
+            </div>
+            <div>
+                <dt>正确题数：</dt>
+                <dd><span id="correct-count">0</span></dd>
+            </div>
+            <div>
+                <dt>错误题数：</dt>
+                <dd><span id="wrong-count">0</span></dd>
+            </div>
+        </dl>
+        <button id="btn-back" class="btn-primary">回到主页</button>
     </div>
+
 
     <script src="script.js"></script>
 </body>
